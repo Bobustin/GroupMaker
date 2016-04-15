@@ -7,10 +7,20 @@ public class Runner
 {
 	public static void main(String args[])
 	{
+		testIO();
 			
 	}
 	
-	public ArrayList<String> getStudentNames(String filepath) throws IOException{
+	public static void testIO(){
+		try{
+			ArrayList<String> names = getStudentNames("test.txt");
+			System.out.println(names);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<String> getStudentNames(String filepath) throws IOException{
 		ArrayList<String> names = new ArrayList<String>();		
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String line;
