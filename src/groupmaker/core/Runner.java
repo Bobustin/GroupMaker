@@ -2,13 +2,18 @@ package groupmaker.core;
 
 import java.util.ArrayList;
 import java.io.*;
+import javax.swing.SwingUtilities;
 
 public class Runner 
 {
 	public static void main(String args[])
 	{
-		testIO();
-			
+		//testIO();
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				new GroupMakerGUI();
+			}
+		});
 	}
 	
 	public static void testIO(){
