@@ -6,11 +6,17 @@ import javax.swing.JPanel;
 
 public class GroupMakerGUI {
 
-	JFrame frame = new JFrame();
-	JPanel selectionPanel = new JPanel();
-	JLabel test = new JLabel("Test");
+	JFrame frame;
+	JPanel selectionPanel,displayPanel;
+	JLabel test;
 	public GroupMakerGUI()
 	{
+		frame = new JFrame();
+		selectionPanel  = new JPanel();
+		displayPanel = new JPanel();
+		test  = new JLabel("Test");
+		
+		
 		frame.setVisible(true);
 		frame.setTitle("Group Maker");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
