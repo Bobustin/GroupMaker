@@ -1,9 +1,9 @@
 package groupmaker.core;
 
-public class GroupMakerRunner 
+public class Runner 
 {
 	public static void main(String args[])
 		{
-			new GroupMaker();
+			
 		}
 }
