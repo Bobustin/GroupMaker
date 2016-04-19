@@ -2,6 +2,7 @@ package groupmaker.core;
 
 import java.util.ArrayList;
 import java.io.*;
+
 import javax.swing.SwingUtilities;
 
 public class Runner 
@@ -11,7 +12,13 @@ public class Runner
 		//testIO();
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				new GroupMakerGUI();
+				ArrayList<String> names = new ArrayList<String>();
+				try {
+					names = getStudentNames("test.txt");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				new GroupMakerGUI(names);
 			}
 		});
 	}
