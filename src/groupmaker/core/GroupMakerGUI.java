@@ -10,24 +10,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 import com.sun.media.sound.Toolkit;
 
 public class GroupMakerGUI {
-
+	//Add JFileChooser
 	JFrame frame;
 	JPanel selectionPanel,displayPanel;
 	JLabel test;
 	JTable selection;
-	JLabel label = new JLabel();
+	JTextArea textArea = new JTextArea();
+	JScrollPane scroll;
 	private ArrayList<ArrayList<String>> groups;
 	private int groupsize = 3;
 	private ArrayList<String> names;
@@ -39,14 +44,18 @@ public class GroupMakerGUI {
 		groupmaker = new GroupMakerLogic();
 		names = n;
 		frame = new JFrame();
-		selectionPanel  = new JPanel(new GridLayout(5,1));
+		selectionPanel  = new JPanel();
+		BoxLayout layout = new BoxLayout(selectionPanel,BoxLayout.PAGE_AXIS);
+		selectionPanel.setLayout(layout);
+		
 		selectionPanel.setSize(200,800);
 		
 		displayPanel = new JPanel();
-		test  = new JLabel("Test");
+		test  = new JLabel("Group Maker");
 		setTable();
 		
 		JButton generate = new JButton("Generate");
+		generate.setPreferredSize(new Dimension(40, 25));
 		generate.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e)
@@ -85,10 +94,15 @@ public class GroupMakerGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		selectionPanel.add(test);
+		selectionPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		selectionPanel.add(sizeSelect);
+		selectionPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		selectionPanel.add(fileSelect);
-		selectionPanel.add(selection);
+		selectionPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		selectionPanel.add(generate);
+		selectionPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		selectionPanel.add(scroll);
+		displayPanel.add(textArea);
 		
 		frame.add(selectionPanel);
 		frame.add(displayPanel);
@@ -123,13 +137,13 @@ public class GroupMakerGUI {
 					names += ", ";
 				}
 			}
-			names += " ";
+			names += "\n";
 		}
-		displayPanel.remove(label);
-		label = new JLabel(names);
-		displayPanel.add(label);
+		displayPanel.remove(textArea);
+		textArea = new JTextArea(names);
+		displayPanel.add(textArea);
 		displayPanel.revalidate();
-	//	displayPanel.repaint();
+		displayPanel.repaint();
 		selectionPanel.revalidate();
 		selectionPanel.repaint();
 	}
@@ -141,21 +155,23 @@ public class GroupMakerGUI {
 		}
 		else
 		{
-			selectionPanel.remove(selection);
+			selectionPanel.remove(scroll);
 		}
-		
+		System.out.println("Names size: " +names.size());
 		Object[][] data = new Object[names.size()][2];
 		String[] columns = {"Boolean", "Names"};
 		
 		for(int x = 0;x < names.size();x++)
 		{
 			data[x][1] = names.get(x);
+			System.out.println(names.get(x));
 			data[x][0] = true;
 		}
 		ltm = new LayerTableModel(data,columns);
 		selection = new JTable(ltm);
+		scroll = new JScrollPane(selection);
 		System.out.println("Table made");
-		selectionPanel.add(selection);
+		selectionPanel.add(scroll);
 		selectionPanel.revalidate();
 	}
 	public void selectFile() throws IOException
