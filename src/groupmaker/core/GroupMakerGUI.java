@@ -14,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,24 +24,27 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
+import java.io.File;
 import com.sun.media.sound.Toolkit;
 
 public class GroupMakerGUI {
-	//Add JFileChooser
+	JFileChooser fileChooser;
 	JFrame frame;
 	JPanel selectionPanel,displayPanel;
 	JLabel test;
 	JTable selection;
 	JTextArea textArea = new JTextArea();
-	JScrollPane scroll;
+	JScrollPane scroll,textScroll;
 	private ArrayList<ArrayList<String>> groups;
 	private int groupsize = 3;
 	private ArrayList<String> names;
 	private LayerTableModel ltm;
 	private GroupMakerLogic groupmaker;
-	private boolean added = false;
+	private boolean added = false, addedText = false;
 	public GroupMakerGUI(ArrayList<String> n)
 	{
+		textScroll = new JScrollPane(textArea);
+		fileChooser = new JFileChooser();
 		groupmaker = new GroupMakerLogic();
 		names = n;
 		frame = new JFrame();
@@ -102,7 +106,7 @@ public class GroupMakerGUI {
 		selectionPanel.add(generate);
 		selectionPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		selectionPanel.add(scroll);
-		displayPanel.add(textArea);
+		displayPanel.add(textScroll);
 		
 		frame.add(selectionPanel);
 		frame.add(displayPanel);
@@ -139,12 +143,9 @@ public class GroupMakerGUI {
 			}
 			names += "\n";
 		}
-		displayPanel.remove(textArea);
-		textArea = new JTextArea(names);
-		displayPanel.add(textArea);
-		displayPanel.revalidate();
+		textArea.setText(names);
 		displayPanel.repaint();
-		selectionPanel.revalidate();
+		displayPanel.revalidate();
 		selectionPanel.repaint();
 	}
 	public void setTable()
@@ -176,16 +177,23 @@ public class GroupMakerGUI {
 	}
 	public void selectFile() throws IOException
 	{
-		String filepath = JOptionPane.showInputDialog("Enter File Name:");
-		ArrayList<String> n = new ArrayList<String>();		
-		BufferedReader reader = new BufferedReader(new FileReader(filepath));
+		File selectedFile = fileChooser.getSelectedFile();
+		ArrayList<String> n = new ArrayList<String>();
+		
+		JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+          selectedFile = fileChooser.getSelectedFile();
+          System.out.println(selectedFile.getName());
+        }
+        
+		BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
 		String line;
 		while((line=reader.readLine())!=null){
 			n.add(line);
 		}
 		reader.close();
 		names = n;
-		System.out.println(filepath);
 		setTable();
 	}
 }
